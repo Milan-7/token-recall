@@ -13,7 +13,7 @@ Code for the term paper *[your title]* (Advanced Topics in Computational Text an
 | Prompting | 3-shot cloze-style completion per relation; demonstrations are held out from evaluation (`results/demos.json`) |
 | Main metric | Greedy generation; correct if any gold alias appears as a whole-word span (normalised) |
 | Teacher-forced metrics | Per-token top-1 accuracy of the canonical object given the gold prefix; first-token rank; log-probability |
-| Negative control | Copy task with the *same* target strings: the answer is given verbatim in the prompt, so length should not matter if the pipeline is unbiased |
+| Negative control | In-context (open-book) control: the same prompt and target, but the full fact is stated once at the top of the prompt, so the model only copies it. Length should matter little if the pipeline is unbiased |
 | Analysis | Logistic regression with relation fixed effects; object tokens, subject tokens, log10 subject and object popularity. Token counts capped at 6. Pooled model tests token × scale interaction with fact-clustered standard errors |
 
 ## Run
@@ -33,7 +33,7 @@ python analyze.py --results ../results --out ..
 
 ## Outputs
 
-- `results/<model>.csv` — one row per fact: generation, correctness, token counts, teacher-forced and copy-control scores
+- `results/<model>.csv` — one row per fact: generation, correctness, token counts, teacher-forced and in-context-control scores (`copy_*` columns)
 - `results/summary.json` — all regression coefficients and headline numbers
 - `tables/*.tex` — LaTeX tables (use `booktabs`)
 - `figures/*.pdf` — figures for the paper
@@ -41,9 +41,9 @@ python analyze.py --results ../results --out ..
 ## Files
 
 ```
-src/templates.py   relation templates and copy-control demonstrations
+src/templates.py   relation templates
 src/common.py      data preparation, prompts, answer matching (no torch dependency)
-src/probe.py       model scoring: generation, teacher forcing, copy control
+src/probe.py       model scoring: generation, teacher forcing, in-context control
 src/analyze.py     regressions, tables, figures
 run_colab.ipynb    end-to-end Colab notebook
 ```
