@@ -1,0 +1,4 @@
+__pycache__/
+results_smoke/
+smoke/
+*.zip
