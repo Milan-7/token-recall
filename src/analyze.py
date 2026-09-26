@@ -172,7 +172,7 @@ def fmt_or(r):
 def tex_table(df, caption, label, path):
     cols = "l" + "r" * (df.shape[1] - 1)
     lines = [r"\begin{table}[t]", r"\centering\small", rf"\caption{{{caption}}}",
-             rf"\label{{{label}}}", r"\resizebox{\linewidth}{!}{%",
+             rf"\label{{{label}}}", r"\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%",
              rf"\begin{{tabular}}{{{cols}}}", r"\toprule",
              " & ".join(df.columns) + r" \\", r"\midrule"]
     for _, row in df.iterrows():
@@ -514,6 +514,24 @@ def main():
               "to excluding items whose answer appears in the subject name or equals a "
               "demonstration answer, and to restricting to 1--4-token objects. The last column "
               "is the within-word split effect when demonstration-answer items are excluded.", "tab:rob", os.path.join(tdir, "robustness.tex"))
+
+    # per-relation profile for the largest model (descriptive)
+    big = df[df.short == models[-1]]
+    rel = (big.assign(split=(big.n_obj_tok > big.n_obj_words).astype(int))
+           .groupby("prop")
+           .agg(n=("obj", "size"), tokens=("n_obj_tok", "mean"), split=("split", "mean"),
+                recall=("gen_correct", "mean"), control=("copy_all", "mean"))
+           .sort_values("tokens"))
+    rel_tab = pd.DataFrame({"Relation": rel.index, "n": rel["n"].values,
+                            "Mean tokens": rel["tokens"].map("{:.2f}".format).values,
+                            "Has split": rel["split"].map("{:.0%}".format).str.replace("%", "\\%").values,
+                            "Recall": rel["recall"].map("{:.3f}".format).values,
+                            "Control": rel["control"].map("{:.3f}".format).values})
+    tex_table(rel_tab, f"Relations sorted by mean answer length ({models[-1]}). "
+              "Has split: share of answers with at least one within-word split. "
+              "Recall: generation metric; Control: in-context exact match.",
+              "tab:relations", os.path.join(tdir, "relations.tex"))
+    summary["per_relation_largest_model"] = rel.round(4).reset_index().to_dict("records")
 
     if len(models) > 1:
         dd, cov = pop_bins(df)
