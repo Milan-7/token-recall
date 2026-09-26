@@ -1,6 +1,6 @@
 # Tokenization as a hidden variable in factual recall
 
-Code for the term paper *[your title]* (Advanced Topics in Computational Text and Media Sciences, 2026).
+Code for the term paper  Advanced Topics in Computational Text and Media Sciences.
 
 **Question.** How much of a language model's factual-recall accuracy is explained by how many subword tokens the answer is split into, once entity popularity is controlled for?
 
