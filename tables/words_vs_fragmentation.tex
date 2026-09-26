@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering\small
+\caption{Separating answer length in words from subword fragmentation within words.}
+\label{tab:split}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrr}
+\toprule
+Model & OR / extra word & OR / extra subword split \\
+\midrule
+pythia-160m-deduped & 0.68*** [0.61, 0.76] & 0.57*** [0.51, 0.65] \\
+pythia-410m-deduped & 1.10* [1.01, 1.20] & 0.75*** [0.67, 0.83] \\
+pythia-1.4b-deduped & 1.07 [0.98, 1.16] & 0.76*** [0.70, 0.83] \\
+pythia-2.8b-deduped & 0.82*** [0.76, 0.89] & 0.80*** [0.74, 0.87] \\
+\bottomrule
+\end{tabular}}
+\end{table}

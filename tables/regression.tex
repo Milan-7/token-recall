@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering\small
+\caption{Logistic regression of recall on object/subject length and popularity, with relation fixed effects. Odds ratios [95\% CI]; *p<.05, **p<.01, ***p<.001.}
+\label{tab:reg}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrrrr}
+\toprule
+Model & OR / object token & OR / subject token & OR / 10x subj. pop. & In-context ctrl: OR / obj. token & n \\
+\midrule
+pythia-160m-deduped & 0.60*** [0.55, 0.65] & 1.31*** [1.24, 1.38] & 0.91 [0.83, 1.00] & 0.93*** [0.90, 0.95] & 10703 \\
+pythia-410m-deduped & 0.92* [0.86, 0.98] & 1.19*** [1.13, 1.25] & 1.02 [0.93, 1.12] & 1.06*** [1.03, 1.09] & 14032 \\
+pythia-1.4b-deduped & 0.88*** [0.83, 0.93] & 1.33*** [1.27, 1.39] & 1.32*** [1.22, 1.43] & 0.94*** [0.91, 0.98] & 14216 \\
+pythia-2.8b-deduped & 0.79*** [0.74, 0.84] & 1.49*** [1.43, 1.56] & 1.67*** [1.55, 1.81] & 0.92*** [0.89, 0.94] & 14216 \\
+\bottomrule
+\end{tabular}}
+\end{table}

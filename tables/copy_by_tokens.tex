@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering\small
+\caption{In-context control: exact-match accuracy by object length when the fact is stated in the prompt.}
+\label{tab:copy}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrrr}
+\toprule
+Object tokens & pythia-160m-deduped & pythia-410m-deduped & pythia-1.4b-deduped & pythia-2.8b-deduped \\
+\midrule
+1 & 0.632 (1523) & 0.785 (1523) & 0.934 (1523) & 0.897 (1523) \\
+2 & 0.482 (3872) & 0.772 (3872) & 0.865 (3872) & 0.826 (3872) \\
+3 & 0.378 (3564) & 0.682 (3564) & 0.769 (3564) & 0.745 (3564) \\
+4 & 0.375 (2756) & 0.741 (2756) & 0.804 (2756) & 0.765 (2756) \\
+5 & 0.377 (1365) & 0.710 (1365) & 0.785 (1365) & 0.766 (1365) \\
+6+ & 0.423 (1136) & 0.759 (1136) & 0.827 (1136) & 0.749 (1136) \\
+\bottomrule
+\end{tabular}}
+\end{table}
