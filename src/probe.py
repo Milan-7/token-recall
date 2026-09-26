@@ -115,7 +115,8 @@ def main():
 
     raw = load_dataset("akariasai/PopQA", split="test").to_pandas()
     df, demos = prepare_popqa(raw, n=args.n, seed=args.seed)
-    print(f"[data] {len(df)} facts, {df['prop'].nunique()} relations")
+    print(f"[data] {len(df)} facts, {df['prop'].nunique()} relations "
+          f"({df.attrs.get('n_dropped_missing', 0)} rows dropped for missing labels)")
 
     tok = AutoTokenizer.from_pretrained(args.model)
     if tok.pad_token is None:

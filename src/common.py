@@ -56,6 +56,16 @@ def prepare_popqa(df, n=None, seed=0, n_demos=3):
         raise ValueError(f"PopQA columns changed; missing {missing}. "
                          f"Found: {list(df.columns)}")
     df = df[df["prop"].isin(TEMPLATES)].copy()
+
+    # A few PopQA rows have a missing subject/object label or popularity; they
+    # cannot be templated or controlled for, so they are excluded (and counted).
+    n_before = len(df)
+    df = df.dropna(subset=["subj", "obj", "s_pop", "o_pop"])
+    df["subj"] = df["subj"].astype(str).str.strip()
+    df["obj"] = df["obj"].astype(str).str.strip()
+    df = df[(df["subj"] != "") & (df["obj"] != "")]
+    n_dropped = n_before - len(df)
+
     df["answers"] = [
         list(dict.fromkeys([o] + as_list(a)))  # canonical object first, dedup
         for o, a in zip(df["obj"], df["possible_answers"])
@@ -71,7 +81,9 @@ def prepare_popqa(df, n=None, seed=0, n_demos=3):
 
     if n is not None and n < len(df):
         df = df.sample(n=n, random_state=seed)
-    return df.reset_index(drop=True), demos
+    df = df.reset_index(drop=True)
+    df.attrs["n_dropped_missing"] = n_dropped
+    return df, demos
 
 
 # ---------------------------------------------------------------- prompts
