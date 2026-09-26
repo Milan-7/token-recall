@@ -186,7 +186,7 @@ def curve(df, ycol, min_n):
 
 def fig_by_model(df, models, out, min_n):
     fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.8), sharey=True)
-    panels = [("gen_correct", "(a) Factual recall"), ("copy_all", "(b) Copy control")]
+    panels = [("gen_correct", "(a) Factual recall"), ("copy_all", "(b) In-context control (answer given)")]
     for ax, (ycol, title) in zip(axes, panels):
         for i, m in enumerate(models):
             x, y, lo, hi = curve(df[df.short == m], ycol, min_n)
@@ -277,7 +277,7 @@ def main():
               "Factual recall accuracy by object length (n in parentheses).",
               "tab:acc", os.path.join(tdir, "acc_by_tokens.tex"))
     tex_table(accuracy_table(df, models, "copy_all"),
-              "Copy-control exact-match accuracy by object length.",
+              "In-context control: exact-match accuracy by object length when the fact is stated in the prompt.",
               "tab:copy", os.path.join(tdir, "copy_by_tokens.tex"))
 
     # --- per-model regressions
@@ -296,7 +296,7 @@ def main():
                          "OR / object token": fmt_or(r.loc["obj_tok"]),
                          "OR / subject token": fmt_or(r.loc["subj_tok"]),
                          "OR / 10x subj. pop.": fmt_or(r.loc["log_s_pop"]),
-                         "Copy ctrl: OR / obj. token":
+                         "In-context ctrl: OR / obj. token":
                              fmt_or(ctrl.set_index("term").loc["obj_tok"]) if ctrl is not None else "ceiling",
                          "n": n})
         s = spl.set_index("term")

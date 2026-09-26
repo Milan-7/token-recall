@@ -1,4 +1,4 @@
-"""Run the factual-recall probe and the copy-task control for one model.
+"""Run the factual-recall probe and the in-context control for one model.
 
 Usage (Colab / any GPU):
     python src/probe.py --model EleutherAI/pythia-410m-deduped --n 5000
@@ -133,7 +133,8 @@ def main():
 
     prompts = [fact_prompt(r, s, demos) for r, s in zip(df["prop"], df["subj"])]
     targets = [target(o) for o in df["obj"]]
-    ctrl_prompts = [copy_prompt(o) for o in df["obj"]]
+    ctrl_prompts = [copy_prompt(r, s, o, demos)
+                    for r, s, o in zip(df["prop"], df["subj"], df["obj"])]
 
     mis = check_tokenisation(tok, prompts, targets)
     print(f"[check] tokenisation mismatch rate (should be ~0): {mis:.3f}")
@@ -147,7 +148,7 @@ def main():
     ctrl = pd.DataFrame(teacher_forced(model, tok, ctrl_prompts, targets, device, args.batch_size))
     ctrl.columns = [c.replace("tf_", "copy_") for c in ctrl.columns]
     df = pd.concat([df, tf, ctrl], axis=1)
-    print(f"[tf] exact {df['tf_all'].mean():.3f} | [copy control] exact {df['copy_all'].mean():.3f}")
+    print(f"[tf] exact {df['tf_all'].mean():.3f} | [in-context control] exact {df['copy_all'].mean():.3f}")
 
     df["model"] = args.model
     df["n_params"] = n_params

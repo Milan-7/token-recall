@@ -6,7 +6,7 @@ import json
 import random
 import re
 
-from templates import TEMPLATES, COPY_DEMOS
+from templates import TEMPLATES
 
 
 # ---------------------------------------------------------------- parsing
@@ -83,12 +83,14 @@ def fact_prompt(rel, subj, demos):
     return "\n".join(lines)
 
 
-def copy_prompt(text):
-    """Negative-control prompt: the answer is given verbatim in the prompt."""
-    lines = ["Repeat the text exactly."]
-    lines += [f"{d} => {d}." for d in COPY_DEMOS]
-    lines.append(f"{text} =>")
-    return "\n".join(lines)
+def copy_prompt(rel, subj, obj, demos):
+    """In-context (open-book) control: identical prompt and target to the
+    factual probe, but the complete fact is stated once at the top. The model
+    only has to copy the answer from context, not retrieve it from its
+    parameters, so answer length should matter little if the pipeline is
+    unbiased."""
+    context = f"{TEMPLATES[rel].format(s=subj)} {obj.strip()}."
+    return context + "\n" + fact_prompt(rel, subj, demos)
 
 
 def target(text):

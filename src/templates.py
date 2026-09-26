@@ -22,11 +22,3 @@ TEMPLATES = {
     "religion":       "The religion of {s} is",
     "sport":          "{s} plays the sport of",
 }
-
-# Demonstrations for the copy-task negative control. Invented phrases of
-# different lengths so the format is clear but no factual content is involved.
-COPY_DEMOS = [
-    "orange",
-    "river stone",
-    "the quiet morning train",
-]
