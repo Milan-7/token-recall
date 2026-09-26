@@ -14,7 +14,7 @@ Code for the term paper *[your title]* (Advanced Topics in Computational Text an
 | Main metric | Greedy generation; correct if any gold alias appears as a whole-word span (normalised) |
 | Teacher-forced metrics | Per-token top-1 accuracy of the canonical object given the gold prefix; first-token rank; log-probability |
 | Negative control | In-context (open-book) control: the same prompt and target, but the full fact is stated once at the top of the prompt, so the model only copies it. Length should matter little if the pipeline is unbiased |
-| Analysis | Logistic regression with relation fixed effects; object tokens, subject tokens, log10 subject and object popularity. Token counts capped at 6. Pooled model tests token × scale interaction with fact-clustered standard errors |
+| Analysis | Logistic regression with relation fixed effects, controlling for subject length and subject- and object-popularity deciles (token counts capped at 6). Object length is also decomposed into words and extra within-word subword splits. Recall and control are compared on the same exact-match metric (fact-clustered SEs). Robustness: linear/quartile popularity, excluding answers contained in the subject name, 1–4-token objects only |
 
 ## Run
 
