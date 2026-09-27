@@ -1,8 +1,8 @@
 \begin{table}[t]
 \centering\small
-\caption{Factual recall accuracy by object length (n in parentheses).}
+\caption{Factual recall accuracy (generation, aliases accepted) by object length; unadjusted, n in parentheses.}
 \label{tab:acc}
-\resizebox{\linewidth}{!}{%
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
 \begin{tabular}{lrrrr}
 \toprule
 Object tokens & pythia-160m-deduped & pythia-410m-deduped & pythia-1.4b-deduped & pythia-2.8b-deduped \\

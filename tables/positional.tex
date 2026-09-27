@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering\small
+\caption{Objects of two or more tokens: where recall fails (teacher-forced).}
+\label{tab:pos}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lrrrr}
+\toprule
+Model & First token (recall) & First token (control) & Complete | first correct & Failures at first token \\
+\midrule
+pythia-160m-deduped & 0.051 & 0.426 & 0.524 & 0.975 \\
+pythia-410m-deduped & 0.075 & 0.736 & 0.698 & 0.976 \\
+pythia-1.4b-deduped & 0.110 & 0.822 & 0.650 & 0.959 \\
+pythia-2.8b-deduped & 0.110 & 0.787 & 0.707 & 0.965 \\
+\bottomrule
+\end{tabular}}
+\end{table}

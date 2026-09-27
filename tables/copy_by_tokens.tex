@@ -1,8 +1,8 @@
 \begin{table}[t]
 \centering\small
-\caption{In-context control: exact-match accuracy by object length when the fact is stated in the prompt.}
+\caption{In-context control: teacher-forced exact match by object length when the fact is stated in the prompt; unadjusted.}
 \label{tab:copy}
-\resizebox{\linewidth}{!}{%
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
 \begin{tabular}{lrrrr}
 \toprule
 Object tokens & pythia-160m-deduped & pythia-410m-deduped & pythia-1.4b-deduped & pythia-2.8b-deduped \\

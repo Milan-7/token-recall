@@ -1,0 +1,28 @@
+\begin{table}[t]
+\centering\small
+\caption{Within-word split effect estimated separately for each relation (pythia-2.8b-deduped, generation metric, popularity quartiles). Odds ratios [95\% CI]; relation fixed effects; *p<.05, **p<.01, ***p<.001.}
+\label{tab:perrel}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lrrrr}
+\toprule
+Relation & n & Share with split & Recall & Split OR [95\% CI] \\
+\midrule
+author & 1510 & 0.79 & 0.026 & 0.93 [0.70, 1.23] \\
+capital & 641 & 0.73 & 0.669 & 1.01 [0.85, 1.20] \\
+capital of & 360 & 0.58 & 0.436 & 0.81 [0.64, 1.03] \\
+color & 31 & 0.00 & 0.742 & n/a \\
+composer & 975 & 0.76 & 0.024 & 1.01 [0.74, 1.38] \\
+country & 835 & 0.07 & 0.511 & 0.91 [0.61, 1.35] \\
+director & 1996 & 0.83 & 0.016 & 1.02 [0.76, 1.36] \\
+father & 567 & 0.76 & 0.076 & 0.95 [0.75, 1.20] \\
+genre & 1616 & 0.23 & 0.073 & 0.65 [0.36, 1.16] \\
+mother & 184 & 0.84 & 0.033 & 0.26 [0.07, 1.03] \\
+occupation & 529 & 0.17 & 0.261 & 1.66 [0.64, 4.26] \\
+place of birth & 581 & 0.56 & 0.131 & 0.70 [0.44, 1.11] \\
+producer & 1517 & 0.81 & 0.007 & 0.88 [0.41, 1.90] \\
+religion & 335 & 0.33 & 0.507 & 0.53 [0.23, 1.19] \\
+screenwriter & 1995 & 0.83 & 0.025 & 0.81 [0.63, 1.06] \\
+sport & 544 & 0.10 & 0.542 & 0.72 [0.42, 1.24] \\
+\bottomrule
+\end{tabular}}
+\end{table}

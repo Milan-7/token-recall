@@ -1,0 +1,28 @@
+\begin{table}[t]
+\centering\small
+\caption{Relations sorted by mean answer length (pythia-2.8b-deduped). Has split: share of answers with at least one within-word split. Recall: generation metric; Control: in-context exact match.}
+\label{tab:relations}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lrrrrr}
+\toprule
+Relation & n & Mean tokens & Has split & Recall & Control \\
+\midrule
+color & 31 & 1.06 & 0\% & 0.742 & 0.903 \\
+occupation & 529 & 1.33 & 17\% & 0.261 & 0.938 \\
+sport & 544 & 1.95 & 10\% & 0.542 & 0.829 \\
+country & 835 & 2.20 & 7\% & 0.511 & 0.966 \\
+religion & 335 & 2.29 & 33\% & 0.507 & 0.919 \\
+place of birth & 581 & 2.31 & 56\% & 0.131 & 0.943 \\
+genre & 1616 & 2.33 & 23\% & 0.073 & 0.871 \\
+capital & 641 & 2.66 & 73\% & 0.669 & 0.846 \\
+capital of & 360 & 3.39 & 58\% & 0.436 & 0.422 \\
+producer & 1517 & 3.60 & 81\% & 0.007 & 0.411 \\
+author & 1510 & 3.61 & 79\% & 0.026 & 0.985 \\
+composer & 975 & 3.71 & 76\% & 0.024 & 0.676 \\
+director & 1996 & 3.81 & 83\% & 0.016 & 0.906 \\
+screenwriter & 1995 & 3.82 & 83\% & 0.025 & 0.707 \\
+mother & 184 & 4.36 & 84\% & 0.033 & 0.674 \\
+father & 567 & 4.46 & 76\% & 0.076 & 0.663 \\
+\bottomrule
+\end{tabular}}
+\end{table}

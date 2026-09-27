@@ -1,16 +1,16 @@
 \begin{table}[t]
 \centering\small
-\caption{Separating answer length in words from subword fragmentation within words.}
+\caption{Decomposing answer length into the number of words and the number of extra subword splits within words (tokens minus words), for recall under both metrics and for the in-context control (popularity deciles). Odds ratios [95\% CI]; relation fixed effects; *p<.05, **p<.01, ***p<.001.}
 \label{tab:split}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{lrr}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lrrrrrr}
 \toprule
-Model & OR / extra word & OR / extra subword split \\
+Model & Gen.: word & Gen.: split & Exact: word & Exact: split & Control: word & Control: split \\
 \midrule
-pythia-160m-deduped & 0.68*** [0.61, 0.76] & 0.57*** [0.51, 0.65] \\
-pythia-410m-deduped & 1.10* [1.01, 1.20] & 0.75*** [0.67, 0.83] \\
-pythia-1.4b-deduped & 1.07 [0.98, 1.16] & 0.76*** [0.70, 0.83] \\
-pythia-2.8b-deduped & 0.82*** [0.76, 0.89] & 0.80*** [0.74, 0.87] \\
+pythia-160m-deduped & 0.70*** [0.61, 0.80] & 0.65*** [0.58, 0.74] & 0.23*** [0.17, 0.32] & 0.55*** [0.46, 0.65] & 0.92** [0.87, 0.98] & 1.02 [0.99, 1.06] \\
+pythia-410m-deduped & 1.31*** [1.20, 1.43] & 0.80*** [0.72, 0.88] & 0.44*** [0.37, 0.53] & 0.74*** [0.64, 0.84] & 1.07 [0.99, 1.17] & 1.09*** [1.05, 1.13] \\
+pythia-1.4b-deduped & 1.28*** [1.18, 1.39] & 0.81*** [0.74, 0.89] & 0.43*** [0.37, 0.50] & 0.78*** [0.70, 0.86] & 0.94 [0.85, 1.02] & 1.11*** [1.07, 1.15] \\
+pythia-2.8b-deduped & 0.95 [0.87, 1.04] & 0.87*** [0.80, 0.94] & 0.45*** [0.39, 0.51] & 0.88** [0.80, 0.96] & 0.92* [0.85, 1.00] & 1.04* [1.01, 1.08] \\
 \bottomrule
 \end{tabular}}
 \end{table}

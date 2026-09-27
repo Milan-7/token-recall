@@ -1,0 +1,20 @@
+\begin{table}[t]
+\centering\small
+\caption{Robustness of the odds ratio per object token to the popularity control, to excluding items whose answer appears in the subject name or equals a demonstration answer, and to restricting to 1--4-token objects. The last column is the within-word split effect when demonstration-answer items are excluded.}
+\label{tab:rob}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Model & Metric & Linear log pop. & Pop. quartiles & Pop. deciles (main) & Excl. answer in subject & 1--4 tokens only & Excl. gold = demo answer & Split, excl. gold = demo \\
+\midrule
+pythia-160m-deduped & generation & 0.60 & 0.59 & 0.63 & 0.50 & 0.53 & 0.65 & 0.69 \\
+pythia-160m-deduped & exact & 0.40 & 0.37 & 0.42 & 0.23 & 0.35 & 0.43 & 0.66 \\
+pythia-410m-deduped & generation & 0.95 & 1.06 & 1.06 & 1.10 & 1.15 & 1.00 & 0.79 \\
+pythia-410m-deduped & exact & 0.53 & 0.59 & 0.58 & 0.53 & 0.52 & 0.51 & 0.73 \\
+pythia-1.4b-deduped & generation & 0.91 & 1.00 & 1.01 & 1.04 & 1.08 & 0.98 & 0.82 \\
+pythia-1.4b-deduped & exact & 0.54 & 0.58 & 0.59 & 0.56 & 0.50 & 0.54 & 0.79 \\
+pythia-2.8b-deduped & generation & 0.82 & 0.89 & 0.89 & 0.90 & 0.83 & 0.90 & 0.86 \\
+pythia-2.8b-deduped & exact & 0.59 & 0.65 & 0.65 & 0.64 & 0.51 & 0.64 & 0.89 \\
+\bottomrule
+\end{tabular}}
+\end{table}

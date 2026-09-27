@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering\small
+\caption{Other predictors (generation metric, linear log$_{10}$ popularity). Odds ratios [95\% CI]; relation fixed effects; *p<.05, **p<.01, ***p<.001.}
+\label{tab:pop}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lrrr}
+\toprule
+Model & OR / 10x obj. pop. & OR / 10x subj. pop. & OR / subject token \\
+\midrule
+pythia-160m-deduped & 1.46*** [1.23, 1.72] & 1.11* [1.01, 1.23] & 1.30*** [1.22, 1.38] \\
+pythia-410m-deduped & 3.35*** [2.86, 3.92] & 1.18*** [1.08, 1.30] & 1.15*** [1.10, 1.21] \\
+pythia-1.4b-deduped & 3.68*** [3.18, 4.25] & 1.63*** [1.50, 1.78] & 1.31*** [1.25, 1.37] \\
+pythia-2.8b-deduped & 2.97*** [2.61, 3.39] & 2.06*** [1.90, 2.24] & 1.49*** [1.42, 1.56] \\
+\bottomrule
+\end{tabular}}
+\end{table}
