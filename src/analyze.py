@@ -330,6 +330,37 @@ def fig_forest(rows, models, out):
     save(fig, out, "fig4_odds_ratios")
 
 
+def fig_splits(df, model, out, min_n=30):
+    """Unadjusted accuracy by number of extra within-word splits, holding the
+    number of words fixed (1 or 2 words), recall vs. in-context control."""
+    d = df[df.short == model].copy()
+    d["ex"] = d["extra_tok"].clip(upper=3)
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.7), sharey=True)
+    for ax, w in zip(axes, [1, 2]):
+        x = d[d.n_obj_words == w]
+        for ycol, lab, col, mk, ls in [("gen_correct", "Recall (generation)", RAMP[2], "o", "-"),
+                                       ("copy_all", "In-context control (exact)", CONTROL, "D", "--")]:
+            xs, ys, lo, hi = [], [], [], []
+            for k in range(4):
+                g = x[x.ex == k]
+                if len(g) < min_n:
+                    continue
+                l, h = wilson(g[ycol].sum(), len(g))
+                xs.append(k); ys.append(g[ycol].mean()); lo.append(l); hi.append(h)
+            ax.fill_between(xs, lo, hi, color=col, alpha=0.12, linewidth=0)
+            ax.plot(xs, ys, color=col, lw=2, marker=mk, ms=5, ls=ls, label=lab)
+        style(ax)
+        ax.set_xticks(range(4)); ax.set_xticklabels(["0", "1", "2", "3+"])
+        ax.set_xlabel("Extra within-word splits", fontsize=8)
+        ax.set_title(f"({'ab'[w-1]}) {'One-word' if w == 1 else 'Two-word'} answers (n={len(x):,})",
+                     fontsize=9, loc="left")
+        ax.set_ylim(0, 1.02)
+    axes[0].set_ylabel("Accuracy", fontsize=8)
+    axes[0].legend(fontsize=7, frameon=False, loc="center right")
+    fig.tight_layout()
+    save(fig, out, "fig5_splits_by_words")
+
+
 def save(fig, out, name):
     os.makedirs(os.path.join(out, "figures"), exist_ok=True)
     for ext in ["pdf", "png"]:
@@ -533,6 +564,74 @@ def main():
               "tab:relations", os.path.join(tdir, "relations.tex"))
     summary["per_relation_largest_model"] = rel.round(4).reset_index().to_dict("records")
 
+    # split effect within broad relation groups (popularity quintiles: smaller groups)
+    groups = {"Person names": ["director", "producer", "screenwriter", "author", "composer",
+                               "father", "mother"],
+              "Places": ["place of birth", "capital", "capital of", "country"],
+              "Categories": ["occupation", "genre", "sport", "religion", "color"]}
+    grp_rows = []
+    summary["relation_groups"] = {}
+    for g, rels in groups.items():
+        for m in models:
+            d = df[(df.short == m) & df["prop"].isin(rels)]
+            db, cov = pop_bins(d, 5)
+            row = {"Group": g, "Model": m.replace("-deduped", ""), "n": len(d),
+                   "Recall": f"{d['gen_correct'].mean():.3f}"}
+            summary["relation_groups"][f"{g}|{m}"] = {}
+            for y, lab in [("gen_correct", "Split OR, recall"), ("copy_all", "Split OR, control")]:
+                r = or_row(fit_table(db, y, ["obj_words", "extra_tok"] + cov[1:])[0], "extra_tok")
+                ok = np.isfinite(r["hi"]) and r["hi"] < 100
+                row[lab] = fmt_or(pd.Series(r)) if ok else "n/a"
+                summary["relation_groups"][f"{g}|{m}"][y] = r
+            grp_rows.append(row)
+    tex_table(pd.DataFrame(grp_rows),
+              "Within-word split effect estimated separately for three groups of relations "
+              "(generation metric for recall, exact match for the control; popularity quintiles "
+              "and relation fixed effects within each group)." + note,
+              "tab:groups", os.path.join(tdir, "relation_groups.tex"))
+
+    # how far off are wrong first tokens? and length-normalised log-probability
+    ft_rows = []
+    for m in models:
+        d = df[df.short == m]
+        w = d[d.tf_first == 0]
+        for lab, series in [("Median rank of gold 1st token (if wrong)",
+                             w.groupby("obj_tok")["tf_first_rank"].median().map("{:.0f}".format)),
+                            ("Gold 1st token in top 10",
+                             d.groupby("obj_tok")["tf_first_rank"].apply(lambda r: (r < 10).mean())
+                             .map("{:.2f}".format)),
+                            ("Mean log-prob per token, recall",
+                             d.groupby("obj_tok")["tf_mean_lp"].mean().map("{:.2f}".format)),
+                            ("Mean log-prob per token, control",
+                             d.groupby("obj_tok")["copy_mean_lp"].mean().map("{:.2f}".format))]:
+            row = {"Model": m.replace("-deduped", ""), "Measure": lab}
+            for t in range(1, TOK_CAP + 1):
+                row[f"{t}+" if t == TOK_CAP else str(t)] = series.get(t, "--")
+            ft_rows.append(row)
+    tex_table(pd.DataFrame(ft_rows),
+              "First-token rank and length-normalised log-probability of the gold answer by "
+              "answer length (columns: object tokens).",
+              "tab:firsttoken", os.path.join(tdir, "first_token.tex"))
+
+    # split effect per relation (largest model; popularity quartiles, no relation FE)
+    pr_rows = []
+    for r, g in big.groupby("prop"):
+        g = g.assign(prop="all")
+        gb, cov = pop_bins(g, 4)
+        if g["gold_is_demo"].nunique() < 2:
+            cov = [c for c in cov if c != "gold_is_demo"]
+        res = or_row(fit_table(gb, "gen_correct", ["obj_words", "extra_tok"] + cov[1:])[0],
+                     "extra_tok")
+        ok = np.isfinite(res["hi"]) and res["hi"] < 100
+        pr_rows.append({"Relation": r, "n": len(g),
+                        "Share with split": f"{(g.n_obj_tok > g.n_obj_words).mean():.2f}",
+                        "Recall": f"{g['gen_correct'].mean():.3f}",
+                        "Split OR [95\\% CI]": fmt_or(pd.Series(res)) if ok else "n/a"})
+    tex_table(pd.DataFrame(pr_rows),
+              f"Within-word split effect estimated separately for each relation ({models[-1]}, "
+              "generation metric, popularity quartiles)." + note,
+              "tab:perrel", os.path.join(tdir, "per_relation_split.tex"))
+
     if len(models) > 1:
         dd, cov = pop_bins(df)
         dd["scale_c"] = dd["log_params"] - dd["log_params"].mean()
@@ -545,6 +644,7 @@ def main():
     fig_popularity(df, models[-1], args.out, args.min_n)
     fig_positional(df, models, args.out, args.min_n)
     fig_forest(forest, models, args.out)
+    fig_splits(df, models[-1], args.out)
 
     with open(os.path.join(args.results, "summary.json"), "w") as f:
         json.dump(summary, f, indent=1, default=str)
